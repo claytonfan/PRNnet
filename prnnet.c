@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // prnnet.c
 //
-// Network of Pinsky-Rizel Two-Chamber Neurons
+// Network of Pinsky-Rinzel Two-Chamber Neurons
 //   Current Options:
 //     Pinsky-Rinzel Single Neuron ( -pr )
 //     Nearest-neighbor synaptic network
@@ -335,7 +335,8 @@ typedef struct _derivparams { //
    Matrix        syn;         // isynap
    rgrid        *r;           // resistances of grid    v2.00
 } derivparams;
-typedef struct _initcondval { // an entry of initial values     v2.02
+
+typedef struct _initcondval { // an entry of initial values     v2.02
    double   ef;    // key: applied field
    double   vs;    // transmembrane potentiat at the soma
    double   vd;    // transmembrane potentiat at the dendrite
@@ -780,19 +781,22 @@ int main( int argc, char **argv )
          );
       }
       if( cstr ) free( cstr );
-      fclose( fic );   }
+      fclose( fic );
+   }
    if( *outequil ) {
       if( !(foe = fopen( outequil, "w" ) ) ) {
          printf( "%s: Failed to open variable values output file.\n", argv[0] );
          exit(0);
       }
-      fprintf( foe, "# EF: Vs Vd ca h n s c q sNMDA wAMPA\n" );   }
+      fprintf( foe, "# EF: Vs Vd ca h n s c q sNMDA wAMPA\n" );
+   }
    if( *outtermn ) {
       if( !(f_term = fopen( outtermn, "w" ) ) ) {
          printf( "%s: Failed to open terminal neuron log file.\n", argv[0] );
          exit(0);
       }
-      fprintf( f_term, "# EF: terminal neuron\n" );   }
+      fprintf( f_term, "# EF: terminal neuron\n" );
+   }
    //
    // Define parameters based on command options
    //
@@ -1005,7 +1009,8 @@ int main( int argc, char **argv )
             neur->SNMDA,  // synaptic weight - NMDA
             neur->WAMPA   // synaptic weight - AMPA                                     
          );
-         fflush( foe );       }
+         fflush( foe ); 
+      }
       fprintf( f_log, "End  : %s\n", get_time( timestr ) );
       if( f_term ) {                                             // v2.04
          fprintf( f_term, "%f %i\n", mparams.field, mparams.termneuron );
@@ -1099,7 +1104,8 @@ int model( modelparams *mp, progrparams *pp, derivparams *dp )
       for( i=0; i<iN; i++ ) {
          em_dR[i].AA = ( em_dR[i].TD + em_dR[i].DS + em_dR[i].SG ) / em_dR[i].DS;
          em_dR[i].BB = ( em_dR[i].TD + em_dR[i].SG ) * neur[i].g.c * neur[i].Area;
-      }   }
+      }
+   }
    else {
       //
       // Setup resistive network
@@ -1230,11 +1236,13 @@ int model( modelparams *mp, progrparams *pp, derivparams *dp )
 //         fflush ( f_log );
 //      }
 /*
-       // temporary: raise membrane potential at dendrite v2.1       if( mp->pspec->spike && dTime >= mp->pspec->tstart   // at the start of propagation analysis
+       // temporary: raise membrane potential at dendrite v2.1
+       if( mp->pspec->spike && dTime >= mp->pspec->tstart   // at the start of propagation analysis
                             && dTime <  mp->pspec->tstart + timestep ) {
 //        dy[0][V_DEND ] = 60;              // raise above threshold
           dy[0][V_SOMA ] = 60;              // raise above threshold
-          printf( "raised to 60mV\n" );       }
+          printf( "raised to 60mV\n" );
+       }
 */
       //===================== Process each neuron ==============================
       //
@@ -1248,7 +1256,8 @@ int model( modelparams *mp, progrparams *pp, derivparams *dp )
 //       if( mp->pspec->spike && dTime > mp->pspec->tstart) { // if analyze propagation and have started
 //          mp->ip[0].index = 0
 
-
+
+
          //===================== Apply current pulse ===============================
          //
          if( mp->ip[i].index < mp->ip[i].count        &&  // if more pulses to apply
